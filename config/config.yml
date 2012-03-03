@@ -1,3 +1,3 @@
 FACEBOOK_KEY: 258114974267430
 FACEBOOK_SECRET: 30ed3658dbd14dc1edb58821c50d7e21
-PERMISSION: 'email,offline_access,create_event,publish_stream'
+PERMISSION: 'email,offline_access,create_event,publish_stream,publish_actions'
