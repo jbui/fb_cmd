@@ -112,14 +112,21 @@ class RecipesController < ActionController::Base
 	      end
 	when "gosling"
 		#GHETTTOO
-		{
-			"Hey Girl, I'll swiffer your place... if you swiffer mine" => "http://27.media.tumblr.com/tumblr_lud1qt00JE1qztfoso1_500.jpg",
-
-		}
+		gosling = [
+			'http://25.media.tumblr.com/tumblr_lzoiqwPfmo1r8s5fgo1_500.jpg',
+			'http://26.media.tumblr.com/tumblr_lysgcahQTa1r8s5fgo1_500.jpg',
+			'http://24.media.tumblr.com/tumblr_lyqzfn8g4X1r8s5fgo1_500.jpg',
+			'http://28.media.tumblr.com/tumblr_lyqywhNViy1r8s5fgo1_500.jpg',
+			'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16364001600/1/tumblr_ly8ch6t5qN1r8s5fg',
+			'http://29.media.tumblr.com/tumblr_ly7q1ii9yG1r8s5fgo1_500.png',
+			'http://30.media.tumblr.com/tumblr_ly6w6qEeH11r8s5fgo1_500.jpg',
+			'http://24.media.tumblr.com/tumblr_ly5vtb6in51r8s5fgo1_400.jpg',
+			'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16235389039/1/tumblr_ly5u1ekFJE1r8s5fg'
+		]
 		if tagged_users.length == 0
 			#create_link("everyone listen to this", url)
 		else
-			create_link("listen to this!", url, tagged_users)
+			create_link("", gosling[rand(gosling.size)], tagged_users)
 		end
 
 	end
