@@ -75,31 +75,23 @@ class RecipesController < ActionController::Base
 
       all_comics = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno]
       if args.length > 0
-
-        if all_comics.includes? args[0] 
           comic = args[0] 
-        else
-          comic = nil
-        end
-
       else
         comic = all_comics.sample
       end
 
-      if !comic.nil? 
-        rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png" 
-        open("http://kevinformatics.com/rage/#{comic}.png") {|f|
-          File.open(rage_path,"wb") do |file|
-            file.puts f.read
-          end
-        }
+      rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png" 
+      open("http://kevinformatics.com/rage/#{comic}.png") {|f|
+        File.open(rage_path,"wb") do |file|
+          file.puts f.read
+        end
+      }
 
-        if tagged_users.length == 0 then
-          @graph.put_wall_post("", {:picture => rage_path})
-        else
-          tagged_users.each do |uid|
-            @graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
-          end
+      if tagged_users.length == 0 then
+        @graph.put_wall_post("", {:picture => rage_path})
+      else
+        tagged_users.each do |uid|
+          @graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
         end
       end
 
