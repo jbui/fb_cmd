@@ -41,8 +41,8 @@ class RecipesController < ActionController::Base
     end 
 
 	def setup
-		@uid = '502558370'
-		@token = 'AAADqwRNaOCYBAMy1wW9USHJ7X1FccFw38azlP4gbADTZANx1DZCGSsl5Y9VmZCb0QDsg4qTZAFNZBXCZC7wzcrx9e3RBWSf5xx50EuZB4cFwgZDZD'
+		@uid = params[:uid]
+		@token = User.find(@uid).token
 		@graph = Koala::Facebook::API.new(@token)
 		@rest = Koala::Facebook::API.new(@token)
 	end

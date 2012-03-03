@@ -8,6 +8,7 @@ class SessionsController < ActionController::Base
 		user = User.first(conditions: {uid: uid}) || User.create(uid, token)
 
 		session[:login] = true
+        session[:token] = user.token
 		redirect_to root_url
 	end
 
