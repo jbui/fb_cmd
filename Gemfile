@@ -41,4 +41,8 @@ gem "mongoid", ">= 2.4.4"
 gem "koala"
 gem "omniauth"
 gem "omniauth-facebook"
+<<<<<<< HEAD
 gem 'opentok'
+=======
+gem "xml-simple"
+>>>>>>> post video, post image
