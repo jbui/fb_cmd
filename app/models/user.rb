@@ -9,7 +9,7 @@ class User
 		create! do |user|
 			user.uid = uid
 			user.token = token
-		endx	
+		end
 	end
 
 end
