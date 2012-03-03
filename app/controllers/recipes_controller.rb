@@ -29,6 +29,9 @@ class RecipesController < ActionController::Base
       end
     end
 
+    puts args
+    puts tagged_users
+
     # For any command there exist possible parsed params:
     # * key_cmd, first word in command
     # * args, array of arguments that follow (stable)
