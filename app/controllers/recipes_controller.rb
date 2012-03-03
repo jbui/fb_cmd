@@ -79,14 +79,12 @@ class RecipesController < ActionController::Base
 			     file.puts f.read
 			   end
 			}
-			logger.info tagged_users
-			logger.info tagged_users.length
+
 			if tagged_users.length == 0
 	    	@graph.put_picture rage_path
 	    else
-	    	logger.info "MORE THAN 0"
 	    	tagged_users.each do |uid|
-	    		@graph.put_picture rage_path, {}, uid
+	    		@graph.put_picture rage_path, 'image/png', {}, uid
 	    	end
 	    end
 
