@@ -104,6 +104,14 @@ class RecipesController < ActionController::Base
     create_post(message, {"link" => link}, target_id)
   end 
 
+  # Date needs to be in unix timestamp
+  # invitelist is just an array of uids, json, string format
+  def create_event(name, date, invite_list)
+  	event_info = '{"name":"'+name+'", "start_time": '+date+'}'
+  	eid = @rest.rest_call('events.create', event_info: event_info)
+  	@rest.rest_call('events.invite',  eid: eid, uids: invite_list)
+  end
+
   # Say happy birthday to everyone who has a birthday today
   def happy_birthday
     date = Time.now.strftime("%m/%d").to_s
