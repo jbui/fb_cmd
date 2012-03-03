@@ -42,7 +42,7 @@ class RecipesController < ActionController::Base
 
 	def setup
 		@uid = params[:uid]
-		@token = User.find(@uid).token
+		@token = User.first(conditions: {uid: @uid}).token
 		@graph = Koala::Facebook::API.new(@token)
 		@rest = Koala::Facebook::API.new(@token)
 	end
