@@ -35,6 +35,11 @@ class RecipesController < ActionController::Base
 
 		when "location"
 			get_location
+        when "hangout"
+            rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
+            string  =  (0..50).map{ o[rand(o.length)]  }.join;
+            link = "http://fbcmd.herokuapp.com/get_video/" + string
+            create_link("Hangout with me!", link)
 		end
 
       render :nothing => true
@@ -60,6 +65,7 @@ class RecipesController < ActionController::Base
 
 		users = @graph.fql_query(fql_query)
 		users.each do |user|
+            logger.info(user['uid'])
 			@graph.put_wall_post(message, {}, user['uid'].to_s)
 		end
 	end
