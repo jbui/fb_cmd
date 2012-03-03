@@ -36,12 +36,12 @@ class RecipesController < ActionController::Base
 
     when "help"
       query = URI.escape(args.join(" "))
+      text = CGI.unescapeHTML(query)
       link = "http://lmgtfy.com/?q=#{query}&l=1"
-      create_link("Google this: #{query}", link)
       if tagged_users.length == 0
-        create_link("Google this: #{query}", link)
+        create_link("Google this: #{text}", link)
       else
-        create_link("Google this: #{query}", link, tagged_users)
+        create_link("Google this: #{text}", link, tagged_users)
       end
 
     when "yelp"
@@ -57,8 +57,7 @@ class RecipesController < ActionController::Base
       get_location
 
     when "hangout"
-      rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
-      string  =  (0..5).map{ o[rand(o.length)]  }.join;
+      string = (0...4).map{65.+(rand(25)).chr}.join
       link = "http://fbcmd.herokuapp.com/get_video/" + string
       if tagged_users.length == 0
         create_link("Hangout with me!", link)
