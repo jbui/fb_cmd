@@ -37,11 +37,11 @@ class RecipesController < ActionController::Base
     when "help"
       query = URI.escape(args.join(" "))
       link = "http://lmgtfy.com/?q=#{query}&l=1"
-      create_link("Google this!", link)
+      create_link("Google this: #{query}", link)
       if tagged_users.length == 0
-        create_link("Google this!", link)
+        create_link("Google this: #{query}", link)
       else
-        create_link("Google this!", link, tagged_users)
+        create_link("Google this: #{query}", link, tagged_users)
       end
 
     when "yelp"
