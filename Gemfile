@@ -42,3 +42,4 @@ gem "koala"
 gem "omniauth"
 gem "omniauth-facebook"
 gem 'opentok'
+gem "xml-simple"
