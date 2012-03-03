@@ -78,12 +78,13 @@ class RecipesController < ActionController::Base
     		comic = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno].sample
     	end
     
-    	rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png"	
-			open("http://kevinformatics.com/rage/#{comic}.png") {|f|
-			   File.open(rage_path,"wb") do |file|
-			     file.puts f.read
-			   end
-			}
+      rage_path = "http://kevinformatics.com/rage/#{comic}.png"
+    	# rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png"	
+			# open("http://kevinformatics.com/rage/#{comic}.png") {|f|
+			#    File.open(rage_path,"wb") do |file|
+			#      file.puts f.read
+			#    end
+			# }
 
 		if tagged_users.length == 0 then
 			@graph.put_wall_post("", {:picture => rage_path})
