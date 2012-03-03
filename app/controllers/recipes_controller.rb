@@ -36,13 +36,15 @@ class RecipesController < ActionController::Base
     when "help"
       query = URI.escape(args.join(" "))
       link = "http://lmgtfy.com/?q=#{query}&l=1"
-      create_link("Help I'm a noob!", link)
-      @redirect_url = "https://www.facebook.com/me"
+      create_link("Google this!", link)
+      if tagged_users.length == 0
+        create_link("Google this!", link)
+      else
+        create_link("Google this!", link, tagged_users)
+      end
 
     when "yelp"
       url = query_yelp(URI.escape(args.join(" ")))
-      create_link("Anyone want to get food?", url)
-      @redirect_url = "https://www.facebook.com/me"
 
       if tagged_users.length == 0
         create_link("Anyone want to get food?", url)
@@ -52,14 +54,16 @@ class RecipesController < ActionController::Base
 
     when "location"
       get_location
-      @redirect_url = "https://www.facebook.com/me"
 
     when "hangout"
       rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
       string  =  (0..50).map{ o[rand(o.length)]  }.join;
       link = "http://fbcmd.herokuapp.com/get_video/" + string
-      create_link("Hangout with me!", link)
-      @redirect_url = "https://www.facebook.com/me"
+      if tagged_users.length == 0
+        create_link("Hangout with me!", link)
+      else
+        create_link("Hangout with me!", link, tagged_users)
+      end
     end
 
     render :text => @redirect_url

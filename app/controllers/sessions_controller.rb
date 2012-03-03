@@ -7,7 +7,7 @@ class SessionsController < ActionController::Base
 
 		user = User.first(conditions: {uid: uid}) 
         unless user.nil?
-          user.update_attributes!(uid:uid, token: token)) 
+          user.update_attributes!(uid:uid, token: token) 
         else 
           User.create(uid, token)
         end
