@@ -19,9 +19,16 @@ class RecipesController < ActionController::Base
 			query = URI.escape(args.join(" "))
 			link = "http://lmgtfy.com/?q=#{query}&l=1"
 			create_link("Help I'm a noob!", link)
+
+		when "location"
+			get_location(fake_address=true)
+
 		end
-		
+
+
 	end
+
+
 
 	private
 	def setup
@@ -53,6 +60,26 @@ class RecipesController < ActionController::Base
 		render :nothing => true
 	end
 
+	def get_location(fake_address=false)
+
+		ip = request.remote_ip
+		if fake_address
+			ip = "169.228.145.85"
+		end
+
+		geolocation_domain = "freegeoip.net"
+		geolocation_request = "/json/#{ip}"
+		json_resp = Net::HTTP.get_response(geolocation_domain, geolocation_request).body
+		json_resp = ActiveSupport::JSON.decode(json_resp)
+
+		# Example Response
+		# {"city"=>"La Jolla", "region_code"=>"CA", "longitude"=>"-117.236", 
+		#  "region_name"=>"California", "country_code"=>"US", "latitude"=>"32.8807", 
+		#  "country_name"=>"United States", "ip"=>"169.228.145.85", 
+		#  "zipcode"=>"92093", "metrocode"=>"825"}
+		return json_resp
+
+	end
 	#@graph.put_wall_post("explodingdog!", {:name => "i love loving you", :link => "http://www.explodingdog.com/title/ilovelovingyou.html"}, "tmiley")
 
 
