@@ -32,6 +32,10 @@ class RecipesController < ActionController::Base
       render :nothing => true
 	end
 
+    def create_post(message, attachment={}, target_id="me")
+        @graph.put_wall_post(message, attachment, target_id)
+    end
+
     def create_link(message, link, target_id="me")
         create_post(message, {"link" => link}, target_id)
     end 
