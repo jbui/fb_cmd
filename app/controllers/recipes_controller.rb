@@ -14,23 +14,14 @@ class RecipesController < ActionController::Base
     cmd = params[:q]
     cmd = CGI.unescapeHTML(cmd)
 
-    cmd = cmd.split
-    key_cmd = cmd[0]
+    # @[502558370:James Bui] 
+    tagged_users = cmd.scan(/@\[(\d+):[\w ]+\]/).flatten
 
-    args = []
-    tagged_users = []
+    args = cmd.gsub(/@\[(\d+):[\w ]+\]/, "")
+    args = args.split
 
-    cmd[1..-1].each do |arg|
-      # @[502558370:James Bui] 
-      if arg =~ /@\[(\d+):.*\]/
-        tagged_users << $1
-      else
-        args << arg
-      end
-    end
-
-    puts args
-    puts tagged_users
+    key_cmd = args[0]
+    args = args[1..-1]
 
     # For any command there exist possible parsed params:
     # * key_cmd, first word in command
@@ -71,7 +62,7 @@ class RecipesController < ActionController::Base
       @redirect_url = "https://www.facebook.com/me"
     end
 
-    render :json => { :redirect => @redirect_url }
+    render :text => @redirect_url
   end
 
   private
