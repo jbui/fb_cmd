@@ -96,7 +96,7 @@ class RecipesController < ActionController::Base
 		message = 'HAPPY BIRTHDAY!'
 
 		users = @graph.fql_query(fql_query)
-		uids = users.map {|user| user['uid'].to_s)}
+		uids = users.map {|user| user['uid'].to_s}
 		@graph.put_wall_post(message, {}, uids)
 
 		# users.each do |user|
