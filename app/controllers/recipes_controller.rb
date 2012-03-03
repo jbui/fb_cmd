@@ -80,10 +80,10 @@ class RecipesController < ActionController::Base
 			}
 
 		if tagged_users.length == 0 then
-	    	@graph.put_picture rage_path
+			@graph.put_wall_post("", {:picture => rage_path})
 	    else
 	    	tagged_users.each do |uid|
-	    		@graph.put_picture rage_path, 'image/png', {}, uid.to_s
+	    		@graph.put_wall_post("", {:picture => rage_path}, uid)
 	    	end
 	    end
 
