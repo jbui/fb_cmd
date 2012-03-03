@@ -67,18 +67,24 @@ class RecipesController < ActionController::Base
 
     when "rage"
     	require "open-uri"
-    	if args.length > 1
+    	if args.length > 0
     	  comic = args[0]
     	else
     		comic = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno].sample
     	end
-    	
+    
+    	rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png"	
 			open("http://kevinformatics.com/rage/#{comic}.png") {|f|
-			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}.png","wb") do |file|
+			   File.open(rage_path,"wb") do |file|
 			     file.puts f.read
 			   end
 			}
-    	@graph.put_picture "#{Rails.root}/tmp/rage_#{Process.pid}.png", 
+
+			if tagged_users.length == 0
+	    	@graph.put_picture rage_path
+	    else
+	    	@graph.put_picture rage_path, {}, tagged_users
+	    end
 
     # more whens
     end
@@ -224,3 +230,4 @@ class RecipesController < ActionController::Base
   end
 
 end
+
