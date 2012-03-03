@@ -8,5 +8,6 @@ FbCmd::Application.routes.draw do
 
   # routes for input
   match '/api' => 'recipes#parse'
+  match '/get_video/:id' => 'videos#show'
 
 end
