@@ -10,4 +10,7 @@ FbCmd::Application.routes.draw do
   match '/api' => 'recipes#parse'
   match '/get_video/:id' => 'videos#show'
 
+  # profile
+  match '/profile' => 'home#profile'
+
 end

@@ -43,3 +43,4 @@ gem "omniauth"
 gem "omniauth-facebook"
 gem 'opentok'
 gem "xml-simple"
+gem "twitter-bootstrap-rails"

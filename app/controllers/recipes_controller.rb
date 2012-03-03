@@ -40,6 +40,7 @@ class RecipesController < ActionController::Base
         create_post(message, {"link" => link}, target_id)
     end 
 
+	private
 	def setup
 		@uid = params[:uid]
 		@token = User.first(conditions: {uid: @uid}).token
@@ -92,6 +93,18 @@ class RecipesController < ActionController::Base
 
 		return json_resp["businesses"][0]["url"]
 	end
+=======
+	# def post_wall(message, target_uid = nil)
+
+	# 	if not target_uid then
+	# 		@graph.put_wall_post(message)
+	# 	else
+			
+	# 	end
+
+	# 	render :nothing => true
+	# end
+>>>>>>> i don't even know
 
 	# Clear all notifications
 	def clear_notifications
@@ -136,6 +149,27 @@ class RecipesController < ActionController::Base
 		end
 
 		render :nothing => true
+	end
+
+	def get_location(fake_address=false)
+
+		ip = request.remote_ip
+		if fake_address
+			ip = "169.228.145.85"
+		end
+
+		geolocation_domain = "freegeoip.net"
+		geolocation_request = "/json/#{ip}"
+		json_resp = Net::HTTP.get_response(geolocation_domain, geolocation_request).body
+		json_resp = ActiveSupport::JSON.decode(json_resp)
+
+		# Example Response
+		# {"city"=>"La Jolla", "region_code"=>"CA", "longitude"=>"-117.236", 
+		#  "region_name"=>"California", "country_code"=>"US", "latitude"=>"32.8807", 
+		#  "country_name"=>"United States", "ip"=>"169.228.145.85", 
+		#  "zipcode"=>"92093", "metrocode"=>"825"}
+		return json_resp
+
 	end
 end
 

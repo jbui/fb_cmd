@@ -9,7 +9,7 @@ class SessionsController < ActionController::Base
 
 		session[:login] = true
         session[:token] = user.token
-		redirect_to root_url
+		redirect_to "profile"
 	end
 
 
