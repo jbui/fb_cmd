@@ -5,6 +5,8 @@ class RecipesController < ActionController::Base
 	# fbcommand line possible commands: http://fbcmd.dtompkins.com/commands
 	def parse
 		cmd = params[:q]
+		cmd = CGI.unescapeHTML(cmd)
+
 		cmd = cmd.split
 		key_cmd = cmd[0]
 		args = cmd[1..-1]
@@ -12,6 +14,11 @@ class RecipesController < ActionController::Base
 		case key_cmd
 		when "birthday"
 			happy_birthday
+
+		when "help"
+			query = URI.escape(args.join(" "))
+			link = "http://lmgtfy.com/?q=#{query}&l=1"
+			create_link("Help I'm a noob!", link)
 		end
 		
 	end
@@ -24,11 +31,13 @@ class RecipesController < ActionController::Base
 	def create_event
 	end
 
-	def create_post
-		#@graph.put_wall_post("hey, i'm learning kaola")
+	# One attachment type: https://developers.facebook.com/docs/guides/attachments/
+	def create_link(message, link, target_id="me")
+		create_post(message, {"link" => link}, target_id)
+	end	
 
-		shit = @graph.fql_query('select uid,name,birthday_date from user where uid in (select uid2 from friend where uid1=me())')
-		raise shit.to_yaml
+	def create_post(message, attachment={}, target_id="me")
+    @graph.put_wall_post(message, attachment, target_id)
 	end
 
 	def happy_birthday
