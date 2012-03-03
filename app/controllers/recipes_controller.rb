@@ -2,10 +2,15 @@ require 'net/http'
 require 'xmlsimple'
 
 class RecipesController < ActionController::Base
-	before_filter :setup
 
 	# fbcommand line possible commands: http://fbcmd.dtompkins.com/commands
 	def parse
+		@uid = params[:uid]
+		@user = User.first(conditions: {uid: @uid})
+		@token = @user.token
+		@graph = Koala::Facebook::API.new(@token)
+		@rest = Koala::Facebook::API.new(@token)
+
 		cmd = params[:q]
 		cmd = CGI.unescapeHTML(cmd)
 
@@ -44,16 +49,6 @@ class RecipesController < ActionController::Base
       create_post(message, {"link" => link}, target_id)
   end 
   
-	def setup
-		@uid = params[:uid]
-        logger.info("UID: #{@uid})")
-		@user = User.first(conditions: {uid: @uid})
-		@token = @user.token
-        logger.info("Token: #{@token}")
-		@graph = Koala::Facebook::API.new(@token)
-		@rest = Koala::Facebook::API.new(@token)
-	end
-
 	# Say happy birthday to everyone
 	def happy_birthday
 		date = Time.now.strftime("%m/%d").to_s
