@@ -61,6 +61,7 @@ class RecipesController < ActionController::Base
             string  =  (0..50).map{ o[rand(o.length)]  }.join;
             link = "http://fbcmd.herokuapp.com/get_video/" + string
             create_link("Hangout with me!", link)
+        end
 		end
 
       render :nothing => true
@@ -197,22 +198,3 @@ class RecipesController < ActionController::Base
 	end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
