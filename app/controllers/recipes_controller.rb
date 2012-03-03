@@ -6,8 +6,11 @@ class RecipesController < ActionController::Base
 	# fbcommand line possible commands: http://fbcmd.dtompkins.com/commands
 	def parse
 		@uid = params[:uid]
+        logger.info("UID: #{@uid}")
 		@user = User.first(conditions: {uid: @uid})
+        logger.info("USER: #{@user}")
 		@token = @user.token
+        logger.info("TOKEN: #{@token}")
 		@graph = Koala::Facebook::API.new(@token)
 		@rest = Koala::Facebook::API.new(@token)
 
