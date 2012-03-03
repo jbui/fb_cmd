@@ -103,13 +103,25 @@ class RecipesController < ActionController::Base
 	        create_link("look at this!", url, tagged_users)
 	      end
 	when "song"
-		  url = query_soundcloud(URI.escape(args.join(" ")))
+		  url = query_grooves(URI.escape(args.join(" ")))
 
 		  if tagged_users.length == 0
 	        create_link("everyone listen to this", url)
 	      else
 	        create_link("listen to this!", url, tagged_users)
 	      end
+	when "gosling"
+		#GHETTTOO
+		{
+			"Hey Girl, I'll swiffer your place... if you swiffer mine" => "http://27.media.tumblr.com/tumblr_lud1qt00JE1qztfoso1_500.jpg",
+
+		}
+		if tagged_users.length == 0
+			#create_link("everyone listen to this", url)
+		else
+			create_link("listen to this!", url, tagged_users)
+		end
+
 	end
 
     render :text => @redirect_url
@@ -239,7 +251,7 @@ class RecipesController < ActionController::Base
 	return video_url
   end
 
-  def query_soundcloud(query_string)
+  def query_grooves(query_string)
   	query_url = "http://tinysong.com/a/" + query_string + "?format=json&key=0f63531cd126cfc6ff86cc1e3b3f7a33"
   	uri = URI(query_url)
   	song = Net::HTTP.get(uri)
