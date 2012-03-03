@@ -69,11 +69,11 @@ class RecipesController < ActionController::Base
     when "rage"
     	require "open-uri"
 			open("http://kevinformatics.com/rage/Happy/08.png") {|f|
-			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}","wb") do |file|
+			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}.png","wb") do |file|
 			     file.puts f.read
 			   end
 			}
-    	@graph.put_picture "#{Rails.root}/tmp/rage_#{Process.pid}"
+    	@graph.put_picture "#{Rails.root}/tmp/rage_#{Process.pid}.png", 
 
     # more whens
     end
@@ -103,6 +103,14 @@ class RecipesController < ActionController::Base
   def create_link(message, link, target_id="me")
     create_post(message, {"link" => link}, target_id)
   end 
+
+  # Date needs to be in unix timestamp
+  # invitelist is just an array of uids, json, string format
+  def create_event(name, date, invite_list)
+  	event_info = '{"name":"'+name+'", "start_time": '+date+'}'
+  	eid = @rest.rest_call('events.create', event_info: event_info)
+  	@rest.rest_call('events.invite',  eid: eid, uids: invite_list)
+  end
 
   # Say happy birthday to everyone who has a birthday today
   def happy_birthday
