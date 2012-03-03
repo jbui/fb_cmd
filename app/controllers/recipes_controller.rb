@@ -67,9 +67,9 @@ class RecipesController < ActionController::Base
 
     when "rage"
     	require "open-uri"
-    	if args.length > 1:
+    	if args.length > 1
     	  comic = args[0]
-    	else:
+    	else
     		comic = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno].sample
     	end
     	
