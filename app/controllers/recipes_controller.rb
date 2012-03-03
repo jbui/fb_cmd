@@ -31,7 +31,7 @@ class RecipesController < ActionController::Base
 
 		when "yelp"
 			url = query_yelp(URI.escape(args.join(" ")))
-			create_link("Anyone want to get food?", link)
+			create_link("Anyone want to get food?", url)
 
 		when "location"
 			get_location
@@ -90,10 +90,12 @@ class RecipesController < ActionController::Base
 		location = get_location
 		yelp_api = "api.yelp.com"
 		yelp_request = "/business_review_search?term=#{term}&lat=#{location['latitude']}&long=#{location['longitude']}&radius=10&limit=5&ywsid=#{APP_CONFIG['YELP_KEY']}"
+        
 
 		json_resp = Net::HTTP.get_response(yelp_api, yelp_request).body
 		json_resp = ActiveSupport::JSON.decode(json_resp)
 
+		logger.info(json_resp["businesses"][0]["url"])
 		return json_resp["businesses"][0]["url"]
 	end
 
