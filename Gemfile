@@ -39,3 +39,5 @@ gem 'jquery-rails'
 gem "bson_ext", ">= 1.5.2"
 gem "mongoid", ">= 2.4.4"
 gem "koala"
+gem "omniauth"
+gem "omniauth-facebook"
