@@ -5,7 +5,12 @@ class SessionsController < ActionController::Base
 		uid = auth.uid
 		token = auth.credentials.token
 
-		user = User.first(conditions: {uid: uid}) && user.update_attributes!(uid:uid) || User.create(uid, token)
+		user = User.first(conditions: {uid: uid}) 
+        unless user.nil?
+          user.update_attributes!(uid:uid, token: token)) 
+        else 
+          User.create(uid, token)
+        end
 
 		session[:login] = true
         session[:token] = user.token
