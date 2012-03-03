@@ -6,10 +6,10 @@ class SessionsController < ActionController::Base
 		token = auth.credentials.token
 
 		user = User.first(conditions: {uid: uid}) 
-        if not user.nil?
-          user.update_attributes!(uid:uid, token: token) 
+        if user.nil?
+          user = User.create(uid, token)
         else 
-          User.create(uid, token)
+          user.update_attributes!(uid:uid, token:token) 
         end
 
 		session[:login] = true
