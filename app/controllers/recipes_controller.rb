@@ -62,8 +62,6 @@ class RecipesController < ActionController::Base
 		users.each do |user|
 			@graph.put_wall_post(message, {}, user['uid'].to_s)
 		end
-
-		render :nothing => true
 	end
 
 	def get_location
