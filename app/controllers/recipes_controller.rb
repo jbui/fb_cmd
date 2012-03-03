@@ -16,6 +16,7 @@ class RecipesController < ActionController::Base
 
     # @[502558370:James Bui] 
     tagged_users = cmd.scan(/@\[(\d+):[\w ]+\]/).flatten
+    tagged_names = cmd.scan(/@\[\d+:([\w ])+\]/).flatten
 
     args = cmd.gsub(/@\[(\d+):[\w ]+\]/, "")
     args = args.split
