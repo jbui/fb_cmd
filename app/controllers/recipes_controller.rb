@@ -26,21 +26,24 @@ class RecipesController < ActionController::Base
 			create_link("Anyone want to get food?", link)
 
 		when "location"
-			get_location(fake_address=true)
+			get_location
 		end
 
       render :nothing => true
 	end
 
-    def create_post(message, attachment={}, target_id="me")
-        @graph.put_wall_post(message, attachment, target_id)
-    end
 
-    def create_link(message, link, target_id="me")
-        create_post(message, {"link" => link}, target_id)
-    end 
 
 	private
+
+  def create_post(message, attachment={}, target_id="me")
+      @graph.put_wall_post(message, attachment, target_id)
+  end
+
+  def create_link(message, link, target_id="me")
+      create_post(message, {"link" => link}, target_id)
+  end 
+  
 	def setup
 		@uid = params[:uid]
 		@user = User.first(conditions: {uid: @uid})
@@ -151,26 +154,6 @@ class RecipesController < ActionController::Base
 		render :nothing => true
 	end
 
-	def get_location(fake_address=false)
-
-		ip = request.remote_ip
-		if fake_address
-			ip = "169.228.145.85"
-		end
-
-		geolocation_domain = "freegeoip.net"
-		geolocation_request = "/json/#{ip}"
-		json_resp = Net::HTTP.get_response(geolocation_domain, geolocation_request).body
-		json_resp = ActiveSupport::JSON.decode(json_resp)
-
-		# Example Response
-		# {"city"=>"La Jolla", "region_code"=>"CA", "longitude"=>"-117.236", 
-		#  "region_name"=>"California", "country_code"=>"US", "latitude"=>"32.8807", 
-		#  "country_name"=>"United States", "ip"=>"169.228.145.85", 
-		#  "zipcode"=>"92093", "metrocode"=>"825"}
-		return json_resp
-
-	end
 end
 
 
