@@ -90,7 +90,7 @@ class RecipesController < ActionController::Base
 			@graph.put_wall_post("", {:picture => rage_path})
 	    else
 	    	tagged_users.each do |uid|
-	    		@graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
+	    		@graph.put_wall_post("", {:picture => rage_path}, uid)
 	    	end
 	    end
 	when "youtube"
