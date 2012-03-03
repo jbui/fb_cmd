@@ -76,7 +76,7 @@ class RecipesController < ActionController::Base
       all_comics = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno]
       if args.length > 0
 
-        if all_comics.includes? args[0] 
+        if all_comics.include? args[0] 
           comic = args[0] 
         else
           comic = nil
