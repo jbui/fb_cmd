@@ -36,12 +36,12 @@ class RecipesController < ActionController::Base
 
     when "help"
       query = URI.escape(args.join(" "))
+      text = CGI.unescapeHTML(query)
       link = "http://lmgtfy.com/?q=#{query}&l=1"
-      create_link("Google this: #{query}", link)
       if tagged_users.length == 0
-        create_link("Google this: #{query}", link)
+        create_link("Google this: #{text}", link)
       else
-        create_link("Google this: #{query}", link, tagged_users)
+        create_link("Google this: #{text}", link, tagged_users)
       end
 
     when "yelp"
@@ -57,8 +57,7 @@ class RecipesController < ActionController::Base
       get_location
 
     when "hangout"
-      rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
-      string  =  (0..50).map{ o[rand(o.length)]  }.join;
+      string = (0...4).map{65.+(rand(25)).chr}.join
       link = "http://fbcmd.herokuapp.com/get_video/" + string
       if tagged_users.length == 0
         create_link("Hangout with me!", link)
@@ -109,6 +108,14 @@ class RecipesController < ActionController::Base
   def create_link(message, link, target_id="me")
     create_post(message, {"link" => link}, target_id)
   end 
+
+  # Date needs to be in unix timestamp
+  # invitelist is just an array of uids, json, string format
+  def create_event(name, date, invite_list)
+  	event_info = '{"name":"'+name+'", "start_time": '+date+'}'
+  	eid = @rest.rest_call('events.create', event_info: event_info)
+  	@rest.rest_call('events.invite',  eid: eid, uids: invite_list)
+  end
 
   # Say happy birthday to everyone who has a birthday today
   def happy_birthday
