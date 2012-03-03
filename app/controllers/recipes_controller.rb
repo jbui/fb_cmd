@@ -83,7 +83,9 @@ class RecipesController < ActionController::Base
 			if tagged_users.length == 0
 	    	@graph.put_picture rage_path
 	    else
-	    	@graph.put_picture rage_path, {}, tagged_users
+	    	tagged_users.each do |tagged_user|
+	    		@graph.put_picture rage_path, {}, tagged_user
+	    	end
 	    end
 
     # more whens
