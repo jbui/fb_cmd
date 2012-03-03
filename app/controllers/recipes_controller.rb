@@ -43,7 +43,8 @@ class RecipesController < ActionController::Base
 	private
 	def setup
 		@uid = params[:uid]
-		@token = User.first(conditions: {uid: @uid}).token
+		@user = User.first(conditions: {uid: @uid})
+		@token = @user.token
         logger.info(@token)
 		@graph = Koala::Facebook::API.new(@token)
 		@rest = Koala::Facebook::API.new(@token)
@@ -93,7 +94,7 @@ class RecipesController < ActionController::Base
 
 		return json_resp["businesses"][0]["url"]
 	end
-	
+
 	# def post_wall(message, target_uid = nil)
 
 	# 	if not target_uid then
