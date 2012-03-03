@@ -6,11 +6,8 @@ class RecipesController < ActionController::Base
 	# fbcommand line possible commands: http://fbcmd.dtompkins.com/commands
 	def parse
 		@uid = params[:uid]
-        logger.info("UID: #{@uid}")
 		@user = User.first(conditions: {uid: @uid})
-        logger.info("USER: #{@user}")
 		@token = @user.token
-        logger.info("TOKEN: #{@token}")
 		@graph = Koala::Facebook::API.new(@token)
 		@rest = Koala::Facebook::API.new(@token)
 
@@ -39,14 +36,18 @@ class RecipesController < ActionController::Base
 
 		when "birthday"
 			happy_birthday
+      @redirect_url = "https://www.facebook.com/me"
 
 		when "help"
 			query = URI.escape(args.join(" "))
 			link = "http://lmgtfy.com/?q=#{query}&l=1"
 			create_link("Help I'm a noob!", link)
+      @redirect_url = "https://www.facebook.com/me"
 
 		when "yelp"
 			url = query_yelp(URI.escape(args.join(" ")))
+			create_link("Anyone want to get food?", url)
+      @redirect_url = "https://www.facebook.com/me"
 
 			if tagged_users.length == 0
 				create_link("Anyone want to get food?", url)
@@ -56,15 +57,17 @@ class RecipesController < ActionController::Base
 
 		when "location"
 			get_location
-        when "hangout"
-            rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
-            string  =  (0..50).map{ o[rand(o.length)]  }.join;
-            link = "http://fbcmd.herokuapp.com/get_video/" + string
-            create_link("Hangout with me!", link)
-        end
-		end
+      @redirect_url = "https://www.facebook.com/me"
 
-      render :nothing => true
+    when "hangout"
+        rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
+        string  =  (0..50).map{ o[rand(o.length)]  }.join;
+        link = "http://fbcmd.herokuapp.com/get_video/" + string
+        create_link("Hangout with me!", link)
+		    @redirect_url = "https://www.facebook.com/me"
+    end
+
+	  render :json => { :redirect => @redirect_url }
 	end
 
 	private
@@ -137,7 +140,6 @@ class RecipesController < ActionController::Base
 		json_resp = Net::HTTP.get_response(yelp_api, yelp_request).body
 		json_resp = ActiveSupport::JSON.decode(json_resp)
 
-		logger.info(json_resp["businesses"][0]["url"])
 		return json_resp["businesses"][0]["url"]
 	end
 
