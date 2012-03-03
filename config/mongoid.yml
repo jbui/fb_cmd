@@ -1,0 +1,23 @@
+development:
+  host: staff.mongohq.com
+  port: 10086
+  username: fb_cmd
+  password: cats
+  database: fb_cmd_01
+
+test:
+  host: localhost
+  database: fb_cmd_test
+
+# set these environment variables on your prod server
+production:
+  host: staff.mongohq.com
+  port: 10086
+  username: fb_cmd
+  password: cats
+  database: fb_cmd_01
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
