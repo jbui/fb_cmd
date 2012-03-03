@@ -71,71 +71,82 @@ class RecipesController < ActionController::Base
       end
 
     when "rage"
-    	require "open-uri"
-    	if args.length > 0
-    	  comic = args[0]
-    	else
-    		comic = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno].sample
-    	end
-    
-    	rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png"	
-			open("http://kevinformatics.com/rage/#{comic}.png") {|f|
-			   File.open(rage_path,"wb") do |file|
-			     file.puts f.read
-			   end
-			}
+      require "open-uri"
 
-		if tagged_users.length == 0 then
-			@graph.put_wall_post("", {:picture => rage_path})
-	    else
-	    	tagged_users.each do |uid|
-	    		@graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
-	    	end
-	    end
-	when "youtube"
-		  url = query_youtube(URI.escape(args.join(" ")))
+      all_comics = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno]
+      if args.length > 0
 
-		  if tagged_users.length == 0
-	        create_link("everyone watch this", url)
-	      else
-	        create_link("watch this", url, tagged_users)
-	      end
-	when "image"
-		  url = query_image(URI.escape(args.join(" ")))
+        if all_comics.includes? args[0] 
+          comic = args[0] 
+        else
+          comic = nil
+        end
 
-		  if tagged_users.length == 0
-	        create_link("everyone look at this", url)
-	      else
-	        create_link("look at this!", url, tagged_users)
-	      end
-	when "song"
-		  url = query_grooves(URI.escape(args.join(" ")))
+      else
+        comic = all_comics.sample
+      end
 
-		  if tagged_users.length == 0
-	        create_link("everyone listen to this", url)
-	      else
-	        create_link("listen to this!", url, tagged_users)
-	      end
-	when "gosling"
-		#GHETTTOO
-		gosling = [
-			'http://25.media.tumblr.com/tumblr_lzoiqwPfmo1r8s5fgo1_500.jpg',
-			'http://26.media.tumblr.com/tumblr_lysgcahQTa1r8s5fgo1_500.jpg',
-			'http://24.media.tumblr.com/tumblr_lyqzfn8g4X1r8s5fgo1_500.jpg',
-			'http://28.media.tumblr.com/tumblr_lyqywhNViy1r8s5fgo1_500.jpg',
-			'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16364001600/1/tumblr_ly8ch6t5qN1r8s5fg',
-			'http://29.media.tumblr.com/tumblr_ly7q1ii9yG1r8s5fgo1_500.png',
-			'http://30.media.tumblr.com/tumblr_ly6w6qEeH11r8s5fgo1_500.jpg',
-			'http://24.media.tumblr.com/tumblr_ly5vtb6in51r8s5fgo1_400.jpg',
-			'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16235389039/1/tumblr_ly5u1ekFJE1r8s5fg'
-		]
-		if tagged_users.length == 0
-			#create_link("everyone listen to this", url)
-		else
-			create_link("Hey girl... ;)", gosling[rand(gosling.size)], tagged_users)
-		end
+      if !comic.nil? 
+        rage_path = "#{Rails.root}/tmp/rage_#{Process.pid}.png" 
+        open("http://kevinformatics.com/rage/#{comic}.png") {|f|
+          File.open(rage_path,"wb") do |file|
+            file.puts f.read
+          end
+        }
 
-	end
+        if tagged_users.length == 0 then
+          @graph.put_wall_post("", {:picture => rage_path})
+        else
+          tagged_users.each do |uid|
+            @graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
+          end
+        end
+      end
+
+    when "youtube"
+      url = query_youtube(URI.escape(args.join(" ")))
+
+      if tagged_users.length == 0
+        create_link("everyone watch this", url)
+      else
+        create_link("watch this", url, tagged_users)
+      end
+    when "image"
+      url = query_image(URI.escape(args.join(" ")))
+
+      if tagged_users.length == 0
+        create_link("everyone look at this", url)
+      else
+        create_link("look at this!", url, tagged_users)
+      end
+    when "song"
+      url = query_grooves(URI.escape(args.join(" ")))
+
+      if tagged_users.length == 0
+        create_link("everyone listen to this", url)
+      else
+        create_link("listen to this!", url, tagged_users)
+      end
+    when "gosling"
+      #GHETTTOO
+      gosling = [
+        'http://25.media.tumblr.com/tumblr_lzoiqwPfmo1r8s5fgo1_500.jpg',
+        'http://26.media.tumblr.com/tumblr_lysgcahQTa1r8s5fgo1_500.jpg',
+        'http://24.media.tumblr.com/tumblr_lyqzfn8g4X1r8s5fgo1_500.jpg',
+        'http://28.media.tumblr.com/tumblr_lyqywhNViy1r8s5fgo1_500.jpg',
+        'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16364001600/1/tumblr_ly8ch6t5qN1r8s5fg',
+        'http://29.media.tumblr.com/tumblr_ly7q1ii9yG1r8s5fgo1_500.png',
+        'http://30.media.tumblr.com/tumblr_ly6w6qEeH11r8s5fgo1_500.jpg',
+        'http://24.media.tumblr.com/tumblr_ly5vtb6in51r8s5fgo1_400.jpg',
+        'http://www.tumblr.com/photo/1280/ryangoslinglitmeme/16235389039/1/tumblr_ly5u1ekFJE1r8s5fg'
+      ]
+      if tagged_users.length == 0
+        #create_link("everyone listen to this", url)
+      else
+        create_link("Hey girl... ;)", gosling[rand(gosling.size)], tagged_users)
+      end
+
+    end
 
     render :text => @redirect_url
   end
@@ -166,9 +177,9 @@ class RecipesController < ActionController::Base
   # Date needs to be in unix timestamp
   # invitelist is just an array of uids, json, string format
   def create_event(name, date, invite_list)
-  	event_info = '{"name":"'+name+'", "start_time": '+date+'}'
-  	eid = @rest.rest_call('events.create', event_info: event_info)
-  	@rest.rest_call('events.invite',  eid: eid, uids: invite_list)
+    event_info = '{"name":"'+name+'", "start_time": '+date+'}'
+    eid = @rest.rest_call('events.create', event_info: event_info)
+    @rest.rest_call('events.invite',  eid: eid, uids: invite_list)
   end
 
   # Say happy birthday to everyone who has a birthday today
@@ -223,13 +234,13 @@ class RecipesController < ActionController::Base
 
   # def post_wall(message, target_uid = nil)
 
-  # 	if not target_uid then
-  # 		@graph.put_wall_post(message)
-  # 	else
+  #   if not target_uid then
+  #     @graph.put_wall_post(message)
+  #   else
 
-  # 	end
+  #   end
 
-  # 	render :nothing => true
+  #   render :nothing => true
   # end
 
   # Clear all notifications
@@ -261,15 +272,15 @@ class RecipesController < ActionController::Base
     uri = URI(query_url)
     videos = XmlSimple.xml_in(Net::HTTP.get(uri))
     video_url = videos['entry'][0]['link'][0]['href']
-	return video_url
+    return video_url
   end
 
   def query_grooves(query_string)
-  	query_url = "http://tinysong.com/a/" + query_string + "?format=json&key=0f63531cd126cfc6ff86cc1e3b3f7a33"
-  	uri = URI(query_url)
-  	song = Net::HTTP.get(uri)
-  	song = song.gsub("\\", "").gsub("\"", "")
-  	return song
+    query_url = "http://tinysong.com/a/" + query_string + "?format=json&key=0f63531cd126cfc6ff86cc1e3b3f7a33"
+    uri = URI(query_url)
+    song = Net::HTTP.get(uri)
+    song = song.gsub("\\", "").gsub("\"", "")
+    return song
   end
 
 end
