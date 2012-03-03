@@ -16,6 +16,7 @@ class RecipesController < ActionController::Base
 
     # @[502558370:James Bui] 
     tagged_users = cmd.scan(/@\[(\d+):[\w ]+\]/).flatten
+    tagged_names = cmd.scan(/@\[\d+:([\w ]+)\]/).flatten
 
     args = cmd.gsub(/@\[(\d+):[\w ]+\]/, "")
     args = args.split
@@ -64,6 +65,17 @@ class RecipesController < ActionController::Base
       else
         create_link("Hangout with me!", link, tagged_users)
       end
+
+    when "rage"
+    	require "open-uri"
+			open("http://kevinformatics.com/rage/Happy/08.png") {|f|
+			   File.open("#{RAILS_ROOT}/tmp/rage_#{Process.pid}","wb") do |file|
+			     file.puts f.read
+			   end
+			}
+    	@graph.put_picture "#{RAILS_ROOT}/tmp/rage_#{Process.pid}"
+
+    # more whens
     end
 
     render :text => @redirect_url
