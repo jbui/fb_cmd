@@ -6,14 +6,13 @@ class SessionsController < ActionController::Base
 		token = auth.credentials.token
 
 		user = User.first(conditions: {uid: uid}) 
-        unless user.nil?
+        if not user.nil?
           user.update_attributes!(uid:uid, token: token) 
         else 
           User.create(uid, token)
         end
 
 		session[:login] = true
-        session[:token] = user.token
 		redirect_to '/profile'
 	end
 
