@@ -68,7 +68,13 @@ class RecipesController < ActionController::Base
 
     when "rage"
     	require "open-uri"
-			open("http://kevinformatics.com/rage/Happy/08.png") {|f|
+    	if args.length > 1:
+    	  comic = args[0]
+    	else:
+    		comic = %w[challengeaccepted derp etwbte fap fu fuckyeah happy herpderp hm lol mad megusta okay poker sad smile thefuck troll why yuno].sample
+    	end
+    	
+			open("http://kevinformatics.com/rage/#{comic}.png") {|f|
 			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}.png","wb") do |file|
 			     file.puts f.read
 			   end
