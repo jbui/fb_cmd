@@ -16,9 +16,24 @@ class RecipesController < ActionController::Base
 
 		cmd = cmd.split
 		key_cmd = cmd[0]
-		args = cmd[1..-1]
 
+		args = []
+		tagged_users = []
+
+		cmd[1..-1].each do |arg|
+			# @[502558370:James Bui] 
+			if arg =~ /@\[(\d+):.*\]/
+				tagged_users << $1
+			else
+				args << arg
+		end
+
+		# For any command there exist possible parsed params:
+		# * key_cmd, first word in command
+		# * args, array of arguments that follow (stable)
+		# * tagged_users, array of uids of tagged users that follow (stable)
 		case key_cmd
+
 		when "birthday"
 			happy_birthday
             @redirect_url = "https://www.facebook.com/me"
@@ -31,6 +46,13 @@ class RecipesController < ActionController::Base
 			url = query_yelp(URI.escape(args.join(" ")))
 			create_link("Anyone want to get food?", url)
             @redirect_url = "https://www.facebook.com/me"
+
+			if tagged_users.length == 0
+				create_link("Anyone want to get food?", url)
+			else
+				create_link("Anyone want to get food?", url, tagged_users)
+			end
+
 		when "location"
 			get_location
             @redirect_url = "https://www.facebook.com/me"
@@ -45,30 +67,46 @@ class RecipesController < ActionController::Base
       render :json => { :redirect => @redirect_url }
 	end
 
-
-
 	private
 
+	# Wraps the Koala wall post. 
+	# Requires a message and defaults to posting on own wall
+	# Pass in an array of uids (or one) to post to walls
+	# target_id MUST BE AN ARRAY IF PASSED IN
   def create_post(message, attachment={}, target_id="me")
-      @graph.put_wall_post(message, attachment, target_id)
+  		if target_id == "me"
+        @graph.put_wall_post(message, attachment, target_id)
+      else
+      	target_id.each do |uid|
+          @graph.put_wall_post(message, attachment, uid)
+        end
+      end
   end
 
+  # Wrapper around create_post for links
+  # Requires a message and link, defaults to posting on own wall
+  # else pass in a single or array of uids to post on
   def create_link(message, link, target_id="me")
       create_post(message, {"link" => link}, target_id)
   end 
   
-	# Say happy birthday to everyone
+	# Say happy birthday to everyone who has a birthday today
 	def happy_birthday
 		date = Time.now.strftime("%m/%d").to_s
 		fql_query = 'select uid,name,birthday_date from user where uid in (select uid2 from friend where uid1=me()) and strpos(birthday_date, "' + date + '") >= 0'
 		message = 'HAPPY BIRTHDAY!'
 
 		users = @graph.fql_query(fql_query)
-		users.each do |user|
-			@graph.put_wall_post(message, {}, user['uid'].to_s)
-		end
+		uids = users.map {|user| user['uid'].to_s)}
+		@graph.put_wall_post(message, {}, uids)
+
+		# users.each do |user|
+      # logger.info(user['uid'])
+			# @graph.put_wall_post(message, {}, user['uid'].to_s)
+		# end
 	end
 
+	# Uses freegeoip to get geolocation
 	def get_location
 
 		ip = request.remote_ip
@@ -89,10 +127,11 @@ class RecipesController < ActionController::Base
 		return json_resp
 	end
 
+	# Queries yelp with the terman geolocated lat/lon
 	def query_yelp(term)
 		location = get_location
 		yelp_api = "api.yelp.com"
-		yelp_request = "/business_review_search?term=#{term}&lat=#{location['latitude']}&long=#{location['longitude']}&radius=10&limit=5&ywsid=#{APP_CONFIG['YELP_KEY']}"
+		yelp_request = "/business_review_search?term=#{term}&lat=#{location['latitude']}&long=#{location['longitude']}&radius=25&limit=5&ywsid=#{APP_CONFIG['YELP_KEY']}"
         
 
 		json_resp = Net::HTTP.get_response(yelp_api, yelp_request).body
