@@ -126,7 +126,7 @@ class RecipesController < ActionController::Base
 		if tagged_users.length == 0
 			#create_link("everyone listen to this", url)
 		else
-			create_link("", gosling[rand(gosling.size)], tagged_users)
+			create_link("Hey girl... ;)", gosling[rand(gosling.size)], tagged_users)
 		end
 
 	end
