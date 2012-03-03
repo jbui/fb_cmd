@@ -8,6 +8,7 @@ class HomeController < ActionController::Base
   	if not session[:login] then
   		redirect_to root_url
   	end
+    render :layout => 'application'
   end
 
 end
