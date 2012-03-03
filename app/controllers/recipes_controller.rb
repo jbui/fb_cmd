@@ -69,11 +69,11 @@ class RecipesController < ActionController::Base
     when "rage"
     	require "open-uri"
 			open("http://kevinformatics.com/rage/Happy/08.png") {|f|
-			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}","wb") do |file|
+			   File.open("#{Rails.root}/tmp/rage_#{Process.pid}.png","wb") do |file|
 			     file.puts f.read
 			   end
 			}
-    	@graph.put_picture "#{Rails.root}/tmp/rage_#{Process.pid}"
+    	@graph.put_picture "#{Rails.root}/tmp/rage_#{Process.pid}.png", 
 
     # more whens
     end
