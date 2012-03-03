@@ -20,15 +20,12 @@ class RecipesController < ActionController::Base
 			link = "http://lmgtfy.com/?q=#{query}&l=1"
 			create_link("Help I'm a noob!", link)
 
-		when "location"
-			get_location(fake_address=true)
-
+		when "yelp"
+			url = query_yelp(URI.escape(args.join(" ")))
+			create_link("Anyone want to get food?", link)
 		end
 
-
 	end
-
-
 
 	private
 	def setup
@@ -60,10 +57,10 @@ class RecipesController < ActionController::Base
 		render :nothing => true
 	end
 
-	def get_location(fake_address=false)
+	def get_location
 
 		ip = request.remote_ip
-		if fake_address
+		if ip == "127.0.0.1"
 			ip = "169.228.145.85"
 		end
 
@@ -78,9 +75,18 @@ class RecipesController < ActionController::Base
 		#  "country_name"=>"United States", "ip"=>"169.228.145.85", 
 		#  "zipcode"=>"92093", "metrocode"=>"825"}
 		return json_resp
-
 	end
-	#@graph.put_wall_post("explodingdog!", {:name => "i love loving you", :link => "http://www.explodingdog.com/title/ilovelovingyou.html"}, "tmiley")
+
+	def query_yelp(term)
+		location = get_location
+		yelp_api = "api.yelp.com"
+		yelp_request = "/business_review_search?term=#{term}&lat=#{location['latitude']}&long=#{location['longitude']}&radius=10&limit=5&ywsid=#{APP_CONFIG['YELP_KEY']}"
+
+		json_resp = Net::HTTP.get_response(yelp_api, yelp_request).body
+		json_resp = ActiveSupport::JSON.decode(json_resp)
+
+		return json_resp["businesses"][0]["url"]
+	end
 
 
 end
