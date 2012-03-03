@@ -65,6 +65,17 @@ class RecipesController < ActionController::Base
       else
         create_link("Hangout with me!", link, tagged_users)
       end
+
+    when "rage"
+    	require "open-uri"
+			open("http://kevinformatics.com/rage/Happy/08.png") {|f|
+			   File.open("#{RAILS_ROOT}/tmp/rage_#{Process.pid}","wb") do |file|
+			     file.puts f.read
+			   end
+			}
+    	@graph.put_picture "#{RAILS_ROOT}/tmp/rage_#{Process.pid}"
+
+    # more whens
     end
 
     render :text => @redirect_url
