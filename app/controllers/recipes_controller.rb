@@ -49,7 +49,7 @@ class RecipesController < ActionController::Base
       if tagged_users.length == 0
         create_link("Anyone want to get food?", url)
       else
-        create_link("Anyone want to get food?", url, tagged_users)
+        create_link("Wanna go get food?", url, tagged_users)
       end
 
     when "location"
@@ -86,9 +86,31 @@ class RecipesController < ActionController::Base
 	    		@graph.put_wall_post("", {:picture => rage_path}, uid.to_s)
 	    	end
 	    end
+	when "youtube"
+		  url = query_youtube(URI.escape(args.join(" ")))
 
-    # more whens
-    end
+		  if tagged_users.length == 0
+	        create_link("everyone watch this", url)
+	      else
+	        create_link("watch this", url, tagged_users)
+	      end
+	when "image"
+		  url = query_image(URI.escape(args.join(" ")))
+
+		  if tagged_users.length == 0
+	        create_link("everyone look at this", url)
+	      else
+	        create_link("look at this!", url, tagged_users)
+	      end
+	when "song"
+		  url = query_soundcloud(URI.escape(args.join(" ")))
+
+		  if tagged_users.length == 0
+	        create_link("everyone listen to this", url)
+	      else
+	        create_link("listen to this!", url, tagged_users)
+	      end
+	end
 
     render :text => @redirect_url
   end
@@ -199,35 +221,30 @@ class RecipesController < ActionController::Base
   end
 
   # Gets a random image from google search
-  def post_image(query_string, target_uid = nil)
+  def query_image(query_string, target_uid = nil)
     query_url = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + query_string
     uri = URI(query_url)
     images = JSON.parse(Net::HTTP.get(uri))
     img_url = images['responseData']['results'][0]['url']
 
-    if target_uid then
-      @graph.put_wall_post("", {:picture => img_url}, target_uid.to_s)
-    else
-      @graph.put_wall_post("", {:picture => img_url})
-    end
-
-    render :nothing => true
+    return img_url
   end
 
   # Gets a random youtube video from a query
-  def post_video(query_string, target_uid = nil)
+  def query_youtube(query_string, target_uid = nil)
     query_url = "http://gdata.youtube.com/feeds/api/videos?q=" + query_string + "&orderby=viewCount"
     uri = URI(query_url)
     videos = XmlSimple.xml_in(Net::HTTP.get(uri))
     video_url = videos['entry'][0]['link'][0]['href']
+	return video_url
+  end
 
-    if target_uid then
-      @graph.put_wall_post("", {:link => video_url}, target_uid.to_s)
-    else
-      @graph.put_wall_post("", {:link => video_url})
-    end
-
-    render :nothing => true
+  def query_soundcloud(query_string)
+  	query_url = "http://tinysong.com/a/" + query_string + "?format=json&key=0f63531cd126cfc6ff86cc1e3b3f7a33"
+  	uri = URI(query_url)
+  	song = Net::HTTP.get(uri)
+  	song = song.gsub("\\", "").gsub("\"", "")
+  	return song
   end
 
 end
