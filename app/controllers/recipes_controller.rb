@@ -58,7 +58,7 @@ class RecipesController < ActionController::Base
 
     when "hangout"
       rand = o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten;  
-      string  =  (0..50).map{ o[rand(o.length)]  }.join;
+      string  =  (0..5).map{ o[rand(o.length)]  }.join;
       link = "http://fbcmd.herokuapp.com/get_video/" + string
       if tagged_users.length == 0
         create_link("Hangout with me!", link)
