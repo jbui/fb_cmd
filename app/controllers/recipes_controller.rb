@@ -93,7 +93,7 @@ class RecipesController < ActionController::Base
 
 		return json_resp["businesses"][0]["url"]
 	end
-=======
+	
 	# def post_wall(message, target_uid = nil)
 
 	# 	if not target_uid then
@@ -104,7 +104,6 @@ class RecipesController < ActionController::Base
 
 	# 	render :nothing => true
 	# end
->>>>>>> i don't even know
 
 	# Clear all notifications
 	def clear_notifications
