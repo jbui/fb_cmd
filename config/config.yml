@@ -1,4 +1,6 @@
 FACEBOOK_KEY: 258114974267430
 FACEBOOK_SECRET: 30ed3658dbd14dc1edb58821c50d7e21
+REDIRECT_URI: http://fbcmd.herokuapp.com/redirect_uri
 PERMISSION: 'email,offline_access,create_event,publish_stream,publish_actions'
 OPENTOK_KEY: 12538632
+

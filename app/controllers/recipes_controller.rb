@@ -25,7 +25,7 @@ class RecipesController < ActionController::Base
 			get_location(fake_address=true)
 		end
 
-
+      render :nothing => true
 	end
 	
 	private
