@@ -17,6 +17,13 @@ body{
 	background-image: url('../assets/white_texture.png');
 }
 
+.cron{
+	padding-top: 20px;
+	width: 500px;
+	margin: 0 auto;
+	text-align: left;
+}
+
 .main{
 	width:500px;
 	height:400px;

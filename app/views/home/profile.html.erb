@@ -8,4 +8,33 @@
     <div class="description">
     	Download the Chrome Extension to get started
     </div>
+
+    <% if @jobs != nil then 
+        i =  1
+    %>
+
+    <div class="cron">
+        <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cron Jobs</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            <% @jobs.each do |job| %>
+               <tr>
+                <td><%= i %> </td>
+                <td><%=job['command']%></td>
+              </tr>
+              <% i = i + 1 %>
+            <% end %>
+
+            </tbody>
+          </table>
+    </div>
+
+    <% end %>
+
 </div>

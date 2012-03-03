@@ -12,6 +12,7 @@ class SessionsController < ActionController::Base
           user.update_attributes!(uid:uid, token:token) 
         end
 
+        session[:uid] = uid
 		session[:login] = true
 		redirect_to '/profile'
 	end

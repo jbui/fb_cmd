@@ -14,6 +14,12 @@ class RecipesController < ActionController::Base
     cmd = params[:q]
     cmd = CGI.unescapeHTML(cmd)
 
+    #CRON JOB?????
+    if cmd.include? "/week" or cmd.include? "/day" or cmd.include? "/month" then
+      Cron.create(@uid, cmd)
+    end
+
+
     # @[502558370:James Bui] 
     tagged_users = cmd.scan(/@\[(\d+):[\w ]+\]/).flatten
     tagged_names = cmd.scan(/@\[\d+:([\w ]+)\]/).flatten

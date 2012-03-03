@@ -5,10 +5,17 @@ class HomeController < ActionController::Base
   end
 
   def profile
-  	if not session[:login] then
+  	#if session[:login] then
+  	if not session[:uid] then
   		redirect_to root_url
-  	end
-    render :layout => 'application'
+  	else
+      @jobs = Cron.all(conditions: {uid: session[:uid]})
+      @jobs = @jobs.to_a
+      if @jobs.size == 0 then
+        @jobs = nil
+      end
+    	render :layout => 'application'
+    end
   end
 
 end
