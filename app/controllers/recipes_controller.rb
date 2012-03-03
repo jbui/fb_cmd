@@ -2,8 +2,18 @@
 class RecipesController < ActionController::Base
 	before_filter :setup
 
+	# fbcommand line possible commands: http://fbcmd.dtompkins.com/commands
 	def parse
-		create_post
+		cmd = params[:q]
+		cmd = cmd.split
+		key_cmd = cmd[0]
+		args = cmd[1..-1]
+
+		case key_cmd
+		when "birthday"
+			happy_birthday
+		end
+		
 	end
 
 	private
