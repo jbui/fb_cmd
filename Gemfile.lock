@@ -83,6 +83,7 @@ GEM
     omniauth-oauth2 (1.0.0)
       oauth2 (~> 0.5.0)
       omniauth (~> 1.0)
+    opentok (0.0.5)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.1)
@@ -139,6 +140,7 @@ DEPENDENCIES
   mongoid (>= 2.4.4)
   omniauth
   omniauth-facebook
+  opentok
   rails (= 3.2.1)
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)

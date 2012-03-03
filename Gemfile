@@ -41,3 +41,4 @@ gem "mongoid", ">= 2.4.4"
 gem "koala"
 gem "omniauth"
 gem "omniauth-facebook"
+gem 'opentok'
