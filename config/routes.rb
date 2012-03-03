@@ -6,7 +6,7 @@ FbCmd::Application.routes.draw do
   match '/auth/failure' => 'sessions#failure'
 
 
-  # routes for recipes
-  match '/api/create_post' => 'recipes#create_post'
+  # routes for input
+  match '/api' => 'recipes#parse'
 
 end
